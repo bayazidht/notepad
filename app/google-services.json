@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "754179119134",
+    "firebase_url": "https://fir-push-5fd7f.firebaseio.com",
+    "project_id": "fir-push-5fd7f",
+    "storage_bucket": "fir-push-5fd7f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:754179119134:android:c36abca4f7f100b045760f",
+        "android_client_info": {
+          "package_name": "com.bayazidht.notepad"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "754179119134-c654ppqoebh34u27odvqnhfn0sldedg4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9QRimat7BmWP7EKCCAkQg1dzpm8_uaf8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "754179119134-c654ppqoebh34u27odvqnhfn0sldedg4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

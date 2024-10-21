@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/home"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".HomeActivity">
+
+    <com.google.android.material.search.SearchView
+        android:id="@+id/search_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:hint="Search">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:padding="5dp"
+            android:id="@+id/search_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="50dp"
+            android:id="@+id/tv_empty_search"
+            android:text="No note found!"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </com.google.android.material.search.SearchView>
+
+    <RelativeLayout
+        android:id="@+id/search_c"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:backgroundTint="@android:color/transparent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <com.google.android.material.search.SearchBar
+                android:id="@+id/search_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Search notes" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:focusable="true"
+            android:clickable="true"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/iv_profile"
+            android:layout_marginTop="19dp"
+            android:layout_marginEnd="20dp"
+            android:layout_alignParentEnd="true"
+            android:padding="7dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="@android:color/darker_gray"
+            app:shapeAppearanceOverlay="@style/circleImageView"
+            android:src="@drawable/ic_profile"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:id="@+id/empty_view"
+        android:layout_centerVertical="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:src="@drawable/img_empty"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"/>
+
+        <TextView
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center_horizontal"
+            android:text="You do not have any note yet!"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swiperRefresh"
+        android:layout_below="@+id/search_c"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:padding="5dp"
+            android:id="@+id/notes_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <include layout="@layout/loader_layout" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/fab_add"
+        android:src="@drawable/ic_add"
+        android:layout_margin="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:ignore="ContentDescription" />
+
+</RelativeLayout>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context=".NoteEditorActivity">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        app:navigationIcon="?attr/homeAsUpIndicator"
+        android:minHeight="?attr/actionBarSize"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <RelativeLayout
+        android:id="@+id/add_note"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <EditText
+            style="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
+            android:inputType="textEmailSubject"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:background="@android:color/transparent" android:gravity="start"
+            android:hint="Title"
+            android:id="@+id/et_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <EditText
+            android:inputType="textMultiLine"
+            android:layout_above="@+id/tv_date"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:background="@android:color/transparent"
+            android:gravity="start"
+            android:layout_below="@id/et_title"
+            android:hint="Note"
+            android:id="@+id/et_desc"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <TextView
+            android:textSize="12sp"
+            android:layout_centerHorizontal="true"
+            android:padding="10dp"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:enabled="false"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:id="@+id/fab_save"
+            android:src="@drawable/ic_save"
+            android:layout_margin="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="ContentDescription" />
+
+    </RelativeLayout>
+
+</LinearLayout>
