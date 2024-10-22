@@ -10,11 +10,13 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -27,6 +29,7 @@ import com.bayazidht.notepad.Model.SearchItem;
 import com.bumptech.glide.Glide;
 import com.google.android.material.search.SearchBar;
 import com.google.android.material.search.SearchView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -41,8 +44,10 @@ import java.util.ArrayList;
 public class HomeActivity extends AppCompatActivity {
 
     private FirebaseUser currentUser;
+    private FirebaseFirestore db;
     private NotesListRecyclerAdapter mAdapter;
     private ArrayList<NotesItem> mNotesItems;
+    private RecyclerView mRecyclerView;
     private ImageView ivProfile;
     private SwipeRefreshLayout swipeRefreshLayout;
 
@@ -69,13 +74,18 @@ public class HomeActivity extends AppCompatActivity {
             v.setPadding(0, systemBars.top, 0, 0);
             return insets;
         });
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.home), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, 0, systemBars.right, systemBars.bottom);
+            return insets;
+        });
 
         findViewById(R.id.fab_add).setOnClickListener(view -> {
             Intent intent = new Intent(HomeActivity.this, NoteEditorActivity.class);
             startActivityForResult(intent, 22);
         });
 
-        RecyclerView mRecyclerView = findViewById(R.id.notes_list);
+        mRecyclerView = findViewById(R.id.notes_list);
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(staggeredGridLayoutManager);
 
@@ -97,7 +107,7 @@ public class HomeActivity extends AppCompatActivity {
             loadSearch();
             loadNotes();
         }
-
+        deleteNote();
     }
 
     private void loadProfile() {
@@ -111,7 +121,7 @@ public class HomeActivity extends AppCompatActivity {
         mNotesItems.clear();
         mSearchItems.clear();
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db = FirebaseFirestore.getInstance();
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder(db.getFirestoreSettings())
                 .setLocalCacheSettings(MemoryCacheSettings.newBuilder().build())
                 .setLocalCacheSettings(PersistentCacheSettings.newBuilder().build())
@@ -187,5 +197,50 @@ public class HomeActivity extends AppCompatActivity {
         }
         sAdapter.filterList(filteredList);
         sAdapter.notifyDataSetChanged();
+    }
+
+    private void deleteNote() {
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                int position = viewHolder.getAdapterPosition();
+                NotesItem deletedNote = mNotesItems.get(position);
+                SearchItem deletedNoteS = mSearchItems.get(position);
+
+                mNotesItems.remove(position);
+                mAdapter.notifyItemRemoved(position);
+
+                mSearchItems.remove(position);
+                sAdapter.notifyItemRemoved(position);
+
+                Snackbar.make(findViewById(R.id.snack_bar_view), "Deleted", Snackbar.LENGTH_LONG)
+                        .setAction("Undo", v -> {
+                            mNotesItems.add(position, deletedNote);
+                            mAdapter.notifyItemInserted(position);
+
+                            mSearchItems.add(position, deletedNoteS);
+                            sAdapter.notifyItemInserted(position);
+                        })
+                        .addCallback(new Snackbar.Callback() {
+                            public void onShown(Snackbar snackbar) {
+                                //  on show
+                            }
+                            public void onDismissed(Snackbar snackbar, int event) {
+                                if (event==2) {
+                                    db.collection("users/"+currentUser.getEmail()+"/notes").document(deletedNote.id)
+                                            .delete()
+                                            .addOnSuccessListener(documentReference -> {})
+                                            .addOnFailureListener(e -> Toast.makeText(HomeActivity.this, "Deletion failed!", Toast.LENGTH_SHORT).show());
+                                }
+                            }
+                        })
+                        .show();
+            }
+        }).attachToRecyclerView(mRecyclerView);
     }
 }

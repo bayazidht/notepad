@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -45,8 +44,10 @@ public class NoteEditorActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_delete) {
-            if (id==null) finish();
-            else {
+            if (id==null) {
+                callBack(false);
+                finish();
+            } else {
                 deleteData();
                 finish();
             }
@@ -149,13 +150,9 @@ public class NoteEditorActivity extends AppCompatActivity {
                         .addOnFailureListener(e -> Toast.makeText(NoteEditorActivity.this, "Failed to update!", Toast.LENGTH_SHORT).show());
             }
 
-            Intent intent = new Intent();
-            intent.putExtra("isEdited", true);
-            setResult(22, intent);
+            callBack(true);
         } else {
-            Intent intent = new Intent();
-            intent.putExtra("isEdited", false);
-            setResult(22, intent);
+           callBack(false);
         }
     }
 
@@ -165,8 +162,12 @@ public class NoteEditorActivity extends AppCompatActivity {
                 .addOnSuccessListener(documentReference -> {})
                 .addOnFailureListener(e -> Toast.makeText(NoteEditorActivity.this, "Deletion failed!", Toast.LENGTH_SHORT).show());
 
+       callBack(true);
+    }
+
+    private void callBack(boolean value) {
         Intent intent = new Intent();
-        intent.putExtra("isEdited", true);
+        intent.putExtra("isEdited", value);
         setResult(22, intent);
     }
 

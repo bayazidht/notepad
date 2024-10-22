@@ -1,6 +1,7 @@
 package com.bayazidht.notepad.Adapter;
 
 import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -48,7 +49,9 @@ public class NotesListRecyclerAdapter extends RecyclerView.Adapter<NotesListRecy
             intent.putExtra("title", currentNoteDetails.getTitle());
             intent.putExtra("desc", currentNoteDetails.getDesc());
             intent.putExtra("date", currentNoteDetails.getDate());
-            ((Activity) mContext).startActivityForResult(intent, 22);
+
+            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(((Activity) mContext));
+            ((Activity) mContext).startActivityForResult(intent, 22, options.toBundle());
         });
     }
 
